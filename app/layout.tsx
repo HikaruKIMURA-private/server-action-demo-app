@@ -35,7 +35,10 @@ export default function RootLayout({
             <Link href="/">LOGO</Link>
           </Button>
           <Button asChild variant="ghost">
-            <Link href="/about">about</Link>
+            <Link href="/about">About</Link>
+          </Button>
+          <Button asChild variant="ghost">
+            <Link href="/mypage">mypage</Link>
           </Button>
         </header>
         {children}
