@@ -37,14 +37,22 @@ export const ItemForm = () => {
   const onSubmit: SubmitHandler<ItemFormValues> = async (
     data: ItemFormValues
   ) => {
-    await createItem(data);
+    createItem(data)
+      .then(() => {
+        toast({
+          title: "投稿しました",
+          description: "アイテム一覧を確認してください",
+        });
 
-    toast({
-      title: "投稿しました",
-      description: "アイテム一覧を確認してください",
-    });
-
-    form.reset();
+        form.reset();
+      })
+      .catch((error) => {
+        toast({
+          title: "投稿に失敗しました",
+          description: "管理者にお問い合わせください",
+          variant: "destructive",
+        });
+      });
   };
 
   return (
