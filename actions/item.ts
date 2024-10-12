@@ -10,6 +10,7 @@ export const createItem = async (formData: {
 
   const { data, error } = await supabase.from("items").insert(formData);
 
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   if (error) {
     throw new Error(error.message);
   }
