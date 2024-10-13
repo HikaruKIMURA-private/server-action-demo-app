@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { currentUser } from "@/app/data/auth";
 import { signOut } from "@/actions/auth";
+import { ModeToggle } from "./ModeToggle";
 
 export async function Header() {
   const user = await currentUser();
@@ -29,6 +30,7 @@ export async function Header() {
           <Link href="/login">Login</Link>
         </Button>
       )}
+      <ModeToggle />
     </header>
   );
 }
