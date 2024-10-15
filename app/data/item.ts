@@ -25,3 +25,16 @@ export const getItem = async (id: string) => {
 
   return data;
 };
+
+export const searchItems = async (keyword: string) => {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from("items")
+    .select()
+    .like("name", `%${keyword}%`);
+
+  console.log(data, error);
+
+  return data;
+};
