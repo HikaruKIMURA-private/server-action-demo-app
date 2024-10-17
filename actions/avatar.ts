@@ -18,5 +18,4 @@ export const uploadAvatar = async (formData: FormData) => {
   } = await supabase.storage.from("avatars").getPublicUrl(image.name);
 
   console.log(publicUrl);
-  return publicUrl;
 };
