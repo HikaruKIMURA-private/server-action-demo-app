@@ -17,7 +17,6 @@ export default async function Items() {
           "use server";
           const keyword = data.get("query") as string;
 
-          console.log(keyword);
           redirect(`/search?q=${encodeURIComponent(keyword)}`);
         }}
         className="flex gap-2 mb-6"
