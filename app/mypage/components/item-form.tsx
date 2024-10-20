@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { createItem } from "@/actions/item";
+import { createItem, updateItem } from "@/actions/item";
 import { useToast } from "@/hooks/use-toast";
 import { useTransition } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -29,22 +29,59 @@ const formSchema = z.object({
 
 type ItemFormValues = z.infer<typeof formSchema>;
 
-export const ItemForm = () => {
+type Props =
+  | {
+      defaultValues: ItemFormValues;
+      isUpdateMode: true;
+      id: string;
+    }
+  | {
+      defaultValues: undefined;
+      isUpdateMode: undefined;
+      id: undefined;
+    };
+
+export const ItemForm = ({ defaultValues, isUpdateMode, id }: Props) => {
   const { toast } = useToast();
+
+  if (!id && isUpdateMode) {
+    throw new Error("idが必要です");
+  }
+
   const [isPending, startTransition] = useTransition();
   const form = useForm<ItemFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      amount: 0,
-    },
+    defaultValues: isUpdateMode
+      ? defaultValues
+      : {
+          name: "",
+          amount: 0,
+        },
   });
 
   const onSubmit: SubmitHandler<ItemFormValues> = async (
     data: ItemFormValues
   ) => {
     startTransition(() => {
-      createItem(data)
+      if (isUpdateMode) {
+        return updateItem(id, data)
+          .then(() => {
+            toast({
+              title: "更新しました",
+              description: "アイテム一覧を確認してください",
+            });
+
+            form.reset();
+          })
+          .catch((error) => {
+            toast({
+              title: "更新に失敗しました",
+              description: "管理者にお問い合わせください",
+              variant: "destructive",
+            });
+          });
+      }
+      return createItem(data)
         .then(() => {
           toast({
             title: "投稿しました",

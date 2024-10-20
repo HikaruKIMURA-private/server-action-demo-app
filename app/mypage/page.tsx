@@ -13,7 +13,11 @@ export default async function Mypage() {
     <>
       <div className="p-6">
         <h1 className="text-2xl font-bold mb-6">mypage</h1>
-        <ItemForm />
+        <ItemForm
+          defaultValues={undefined}
+          isUpdateMode={undefined}
+          id={undefined}
+        />
       </div>
     </>
   );
