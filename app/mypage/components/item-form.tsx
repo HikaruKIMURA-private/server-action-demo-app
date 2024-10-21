@@ -14,11 +14,11 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { createItem, updateItem } from "@/actions/item";
+import { createItem, deleteItem, updateItem } from "@/actions/item";
 import { useToast } from "@/hooks/use-toast";
 import { useTransition } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-
+import { useRouter } from "next/navigation";
 const formSchema = z.object({
   amount: z.coerce.number().min(1, { message: "1円以上で入力してください" }),
   name: z
@@ -42,6 +42,7 @@ type Props =
     };
 
 export const ItemForm = ({ defaultValues, isUpdateMode, id }: Props) => {
+  const router = useRouter();
   const { toast } = useToast();
 
   if (!id && isUpdateMode) {
@@ -139,7 +140,28 @@ export const ItemForm = ({ defaultValues, isUpdateMode, id }: Props) => {
                 </FormItem>
               )}
             />
-            <Button type="submit">商品追加</Button>
+            <div className="flex gap-3">
+              <Button type="submit">
+                {isUpdateMode ? "更新" : "商品追加"}
+              </Button>
+              {isUpdateMode && (
+                <Button
+                  variant="outline"
+                  type="button"
+                  onClick={() =>
+                    deleteItem(id).then(() => {
+                      toast({
+                        title: "削除しました",
+                        description: "アイテム一覧を確認してください",
+                      });
+                      router.push("/items");
+                    })
+                  }
+                >
+                  削除
+                </Button>
+              )}
+            </div>
           </form>
         </Form>
       )}

@@ -37,3 +37,18 @@ export const updateItem = async (
     .update(formData)
     .eq("id", id);
 };
+
+export const deleteItem = async (id: string) => {
+  const supabase = createClient();
+  const user = await currentUser();
+
+  if (!user) {
+    throw new Error("ログインしてください");
+  }
+
+  const { error } = await supabase.from("items").delete().eq("id", id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+};
