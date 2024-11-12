@@ -4,11 +4,17 @@ import { Pencil } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-export default async function ItemPage({
-  params: { id },
-}: {
-  params: { id: string };
-}) {
+export default async function ItemPage(
+  props: {
+    params: Promise<{ id: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const item = await getItem(id);
 
   if (!item) {
