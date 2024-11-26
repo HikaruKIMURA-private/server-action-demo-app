@@ -1,17 +1,10 @@
 "use client";
 
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
+import type { SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { FormMessage } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createItem, deleteItem, updateItem } from "@/actions/item";
@@ -26,29 +19,29 @@ const formSchema = z.object({
     .string()
     .min(1, { message: "商品名は1文字以上で入力してください" })
     .max(255, { message: "商品名は255文字以内で入力してください" }),
-  picture: z
-    // z.inferでSchemaを定義したときに型がつくようにするため
-    .custom<FileList>()
-    // 必須にしたい場合
-    .refine((file) => file.length !== 0, { message: "必須です" })
-    // このあとのrefine()で扱いやすくするために整形
-    .transform((file) => file[0])
-    // ファイルサイズを制限したい場合
-    .refine((file) => sizeInMB(file.size) <= MAX_IMAGE_SIZE, {
-      message: "ファイルサイズは最大5MBです",
-    })
-    // 画像形式を制限したい場合
-    .refine((file) => IMAGE_TYPES.includes(file.type), {
-      message: ".jpgもしくは.pngのみ可能です",
-    }),
+  // picture: z
+  //   // z.inferでSchemaを定義したときに型がつくようにするため
+  //   .custom<FileList>()
+  //   // 必須にしたい場合
+  //   .refine((file) => file.length !== 0, { message: "必須です" })
+  //   // このあとのrefine()で扱いやすくするために整形
+  //   .transform((file) => file[0])
+  //   // ファイルサイズを制限したい場合
+  //   .refine((file) => sizeInMB(file.size) <= MAX_IMAGE_SIZE, {
+  //     message: "ファイルサイズは最大5MBです",
+  //   })
+  //   // 画像形式を制限したい場合
+  //   .refine((file) => IMAGE_TYPES.includes(file.type), {
+  //     message: ".jpgもしくは.pngのみ可能です",
+  //   }),
 });
 
-const IMAGE_TYPES = ["image/jpg", "image/png"];
-const MAX_IMAGE_SIZE = 5; // 5MB
-const sizeInMB = (sizeInBytes: number, decimalsNum = 2) => {
-  const result = sizeInBytes / (1024 * 1024);
-  return +result.toFixed(decimalsNum);
-};
+// const IMAGE_TYPES = ["image/jpg", "image/png"];
+// const MAX_IMAGE_SIZE = 5; // 5MB
+// const sizeInMB = (sizeInBytes: number, decimalsNum = 2) => {
+//   const result = sizeInBytes / (1024 * 1024);
+//   return +result.toFixed(decimalsNum);
+// };
 
 type ItemFormValues = z.infer<typeof formSchema>;
 
@@ -86,7 +79,7 @@ export const ItemForm = ({ defaultValues, isUpdateMode, id }: Props) => {
   const onSubmit: SubmitHandler<ItemFormValues> = async (
     data: ItemFormValues
   ) => {
-    console.log("aaaaaa");
+    console.log("data", data);
     startTransition(() => {
       if (isUpdateMode) {
         return updateItem(id, data)
@@ -106,7 +99,6 @@ export const ItemForm = ({ defaultValues, isUpdateMode, id }: Props) => {
             });
           });
       }
-      console.log("data", data);
       return createItem(data)
         .then(() => {
           toast({
@@ -158,7 +150,7 @@ export const ItemForm = ({ defaultValues, isUpdateMode, id }: Props) => {
                   {form.formState.errors.amount?.message}
                 </FormMessage>
               </div>
-              <div className="space-y-2">
+              {/* <div className="space-y-2">
                 <Label htmlFor="picture">画像</Label>
                 <Input
                   id="picture"
@@ -169,7 +161,7 @@ export const ItemForm = ({ defaultValues, isUpdateMode, id }: Props) => {
                 <FormMessage>
                   {form.formState.errors.picture?.message}
                 </FormMessage>
-              </div>
+              </div> */}
               <div className="flex gap-3">
                 <Button type="submit">
                   {isUpdateMode ? "更新" : "商品追加"}

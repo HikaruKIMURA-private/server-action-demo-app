@@ -2,7 +2,7 @@
 
 import { currentUser } from "@/app/data/auth";
 import { createClient } from "@/lib/supabase/server";
-import { TablesInsert, TablesUpdate } from "@/types/database";
+import type { TablesInsert, TablesUpdate } from "@/types/database";
 
 export type CreateItem = TablesInsert<"items"> & {
   picture?: File;
@@ -16,36 +16,34 @@ export const createItem = async (formData: CreateItem) => {
     throw new Error("ログインしてください");
   }
 
-  const picturePath = await uploadPictureToStorage(
-    formData.picture as File | undefined
-  );
+  // const picturePath = await uploadPictureToStorage(
+  //   formData.picture as File | undefined
+  // );
   // TODO: アップロードまではできている
   // error Error: Could not find the 'picture' column of 'items' in the schema cache
 
-  console.log("picturePath", picturePath);
-  const { data, error } = await supabase
-    .from("items")
-    .insert({ ...formData, picture: picturePath });
+  // console.log("picturePath", picturePath);
+  const { data, error } = await supabase.from("items").insert({ ...formData });
   console.log("data", data);
   if (error) {
     throw new Error(error.message);
   }
 };
 
-const uploadPictureToStorage = async (file?: File): Promise<string | null> => {
-  if (!file) return null;
-  const supabase = createClient();
-  const { data, error } = await supabase.storage
-    .from("pictures")
-    .upload(file.name, file);
+// const uploadPictureToStorage = async (file?: File): Promise<string | null> => {
+//   if (!file) return null;
+//   const supabase = createClient();
+//   const { data, error } = await supabase.storage
+//     .from("pictures")
+//     .upload(file.name, file);
 
-  if (error) {
-    console.log("Upload error", error);
-    throw new Error(error.message);
-  }
+//   if (error) {
+//     console.log("Upload error", error);
+//     throw new Error(error.message);
+//   }
 
-  return data.path;
-};
+//   return data.path;
+// };
 
 export const updateItem = async (
   id: string,
