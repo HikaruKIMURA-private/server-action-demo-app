@@ -11,7 +11,6 @@ export const createItem = async (formData: CreateItem) => {
   const supabase = createClient();
   const user = await currentUser();
 
-  console.log("formdata", formData);
   if (!user) {
     throw new Error("ログインしてください");
   }
