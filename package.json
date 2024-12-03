@@ -17,7 +17,9 @@
     "supabase:generate-migration": "bunx supabase db diff | bunx supabase migration new",
     "supabase:generate-seed": "bunx supabase db dump --data-only -f supabase/seed.sql",
     "supabase:push": "bunx supabase db push",
-    "supabase:pull": "bunx supabase db pull"
+    "supabase:pull": "bunx supabase db pull",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -43,11 +45,20 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@chromatic-com/storybook": "^3.2.2",
+    "@storybook/addon-essentials": "8.5.0-alpha.15",
+    "@storybook/addon-interactions": "8.5.0-alpha.15",
+    "@storybook/addon-onboarding": "8.5.0-alpha.15",
+    "@storybook/blocks": "8.5.0-alpha.15",
+    "@storybook/nextjs": "8.5.0-alpha.15",
+    "@storybook/react": "8.5.0-alpha.15",
+    "@storybook/test": "8.5.0-alpha.15",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "postcss": "^8",
-    "tailwindcss": "^3.4.1"
+    "storybook": "8.5.0-alpha.15",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
   }
 }
