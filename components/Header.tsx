@@ -23,12 +23,10 @@ export async function Header() {
 
       {user ? (
         <form action={signOut}>
-          <Button variant="outline">Logout</Button>
+          <Button variant="outline">ログアウト</Button>
         </form>
       ) : (
-        <Button asChild>
-          <Link href="/login">Login</Link>
-        </Button>
+        <Link href="/login">ログイン</Link>
       )}
       <ModeToggle />
     </header>
