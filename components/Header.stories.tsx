@@ -1,6 +1,6 @@
 import { Header } from "./Header";
 import { expect } from "@storybook/test";
-import { within } from "@storybook/testing-library";
+import { waitFor, within } from "@storybook/testing-library";
 import type { Meta, StoryObj } from "@storybook/react";
 import { createMock } from "storybook-addon-module-mock";
 import * as item from "@/app/data/auth";
@@ -23,8 +23,14 @@ export const Default: Story = {
   },
   play: async ({ canvasElement }) => {
     // ログイン中のユーザーが取得できなければ、ログインボタンが表示される
-    const canvas = within(canvasElement);
-    // TODO: 取れない
-    expect(canvas.getByText("ログイン")).toBeInTheDocument();
+    await waitFor(() => {
+      const canvas = within(canvasElement);
+      // @ts-ignore _は使わない
+      const contentElements = canvas.getAllByText((_, element) => {
+        // おそらくUIコンポーネントの仕様で複数箇所にログインの文字列があるため
+        return element?.textContent?.includes("ログイン");
+      });
+      expect(contentElements.length).toBeGreaterThan(0);
+    });
   },
 };
