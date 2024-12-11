@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { currentUser } from "@/app/data/auth";
+import { currentUser } from "#app/data/auth";
 import { signOut } from "@/actions/auth";
 import { ModeToggle } from "./ModeToggle";
 
@@ -26,7 +26,9 @@ export async function Header() {
           <Button variant="outline">ログアウト</Button>
         </form>
       ) : (
-        <Link href="/login">ログイン</Link>
+        <Button asChild variant="outline">
+          <Link href="/login">ログイン</Link>
+        </Button>
       )}
       <ModeToggle />
     </header>
