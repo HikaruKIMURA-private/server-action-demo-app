@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { currentUser } from "#app/data/auth";
-import { signOut } from "@/actions/auth";
+import { signOut } from "#actions/auth";
 import { ModeToggle } from "./ModeToggle";
 
 export async function Header() {

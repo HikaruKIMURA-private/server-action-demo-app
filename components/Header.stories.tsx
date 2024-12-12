@@ -1,8 +1,9 @@
 import { Header } from "./Header";
 import { expect } from "@storybook/test";
-import { waitFor, within } from "@storybook/testing-library";
+import { userEvent, waitFor, within } from "@storybook/testing-library";
 import type { Meta, StoryObj } from "@storybook/react";
 import { currentUser } from "#app/data/auth.mock";
+import { signOut } from "#actions/auth.mock";
 
 export default {
   title: "Header",
@@ -21,7 +22,6 @@ export const Default: Story = {
       const canvas = within(canvasElement);
       // @ts-ignore _は使わない
       const contentElements = canvas.getAllByText((_, element) => {
-        // おそらくUIコンポーネントの仕様で複数箇所にログインの文字列があるため
         return element?.textContent?.includes("ログイン");
       });
 
@@ -46,14 +46,29 @@ export const LoggedIn: Story = {
     };
     currentUser.mockReturnValue(Promise.resolve({ data: { user } }));
   },
-  play: async ({ canvasElement }) => {
+  play: async ({ canvasElement, step }) => {
     await waitFor(() => {
       const canvas = within(canvasElement);
       // @ts-ignore
       const logoutElements = canvas.queryAllByText((_, element) => {
         return element?.textContent?.includes("ログアウト");
       });
+
+      // @ts-ignore
+      const loginElements = canvas.queryAllByText((_, element) => {
+        return element?.textContent?.includes("ログイン");
+      });
+      expect(loginElements.length).toBe(0);
       expect(logoutElements.length).toBeGreaterThan(0);
+    });
+
+    await step("ログアウトをクリックするとログアウトすること", async () => {
+      const canvas = within(canvasElement);
+      const logoutButton = canvas.getByText("ログアウト");
+      await userEvent.click(logoutButton);
+      await waitFor(() => {
+        expect(signOut).toHaveBeenCalled();
+      });
     });
   },
 };

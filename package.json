@@ -67,6 +67,10 @@
       "storybook": "./app/data/auth.mock.ts",
       "default": "./app/data/auth.ts"
     },
+    "#actions/auth": {
+      "storybook": "./actions/auth.mock.ts",
+      "default": "./actions/auth.ts"
+    },
     "#*": [
       "./*",
       "./*.ts",
